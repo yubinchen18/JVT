@@ -13,7 +13,7 @@ class PhonenumberType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('typeLabel')->add('digits')->add('client');
+        $builder->add('typeLabel')->add('digits');
     }
     
     /**

@@ -2,11 +2,30 @@
 
 {% block body %}
     <h1>Client edit</h1>
-
+    
     {{ form_start(edit_form) }}
-        {{ form_widget(edit_form) }}
+        {{ form_row(edit_form._token) }}
+        {{ form_row(edit_form.firstname) }}
+        {{ form_row(edit_form.lastname) }}
+        {{ form_row(edit_form.companyName) }}
+        
+{#        {{ form_widget(form) }}#}
+            
+        <h3>Phonenumbers</h3>
+        
+        <ul class="phonenumbers" data-prototype="{{ form_widget(edit_form.phonenumbers.vars.prototype)|e('html_attr') }}">
+            {# iterate over each existing tag and render its only field: name #}
+            
+            {% for phonenumber in edit_form.phonenumbers %}
+                <li>{{ form_row(phonenumber.typeLabel) }}</li>
+                <li>{{ form_row(phonenumber.digits) }}</li>
+            {% endfor %}
+        </ul>
+        
+        {{ form_errors(edit_form) }}
+
         <input type="submit" value="Edit" />
-    {{ form_end(edit_form) }}
+    {{ form_end(edit_form, {'render_rest': false}) }}
 
     <ul>
         <li>
@@ -19,3 +38,8 @@
         </li>
     </ul>
 {% endblock %}
+
+{#{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/Client/newAction.js') }}"></script>
+{% endblock %}#}

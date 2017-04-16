@@ -4,13 +4,36 @@
     <h1>Client creation</h1>
 
     {{ form_start(form) }}
-        {{ form_widget(form) }}
+        {{ form_row(form._token) }}
+        {{ form_row(form.firstname) }}
+        {{ form_row(form.lastname) }}
+        {{ form_row(form.companyName) }}
+        
+{#        {{ form_widget(form) }}#}
+            
+        <h3>Phonenumbers</h3>
+        
+        <ul class="phonenumbers" data-prototype="{{ form_widget(form.phonenumbers.vars.prototype)|e('html_attr') }}">
+            {# iterate over each existing tag and render its only field: name #}
+            {% for phonenumber in form.phonenumbers %}
+                <li>{{ form_row(phonenumber.typeLabel) }}</li>
+                <li>{{ form_row(phonenumber.digits) }}</li>
+            {% endfor %}
+        </ul>
+        
+        {{ form_errors(form) }}
+
         <input type="submit" value="Create" />
-    {{ form_end(form) }}
+    {{ form_end(form, {'render_rest': false}) }}
 
     <ul>
         <li>
             <a href="{{ path('clients_index') }}">Back to the list</a>
         </li>
     </ul>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/Client/newAction.js') }}"></script>
 {% endblock %}

@@ -4,6 +4,8 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 /**
  * Client
@@ -25,26 +27,26 @@ class Client
     /**
      * @var string
      *
-     * @ORM\Column(name="firstname", type="string", length=255)
+     * @ORM\Column(name="firstname", type="string", length=255, nullable=true)
      */
     private $firstname;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="lastname", type="string", length=255)
+     * @ORM\Column(name="lastname", type="string", length=255, nullable=true)
      */
     private $lastname;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="company_name", type="string", length=255)
+     * @ORM\Column(name="company_name", type="string", length=255, nullable=true)
      */
     private $companyName;
     
     /**
-     * @ORM\OneToMany(targetEntity="Phonenumber", mappedBy="client")
+     * @ORM\OneToMany(targetEntity="Phonenumber", mappedBy="client", cascade={"persist", "remove"})
      */
     private $phonenumbers;
 
@@ -145,6 +147,7 @@ class Client
      */
     public function addPhonenumber(\AppBundle\Entity\Phonenumber $phonenumber)
     {
+        $phonenumber->setClient($this);
         $this->phonenumbers[] = $phonenumber;
 
         return $this;
@@ -168,5 +171,26 @@ class Client
     public function getPhonenumbers()
     {
         return $this->phonenumbers;
+    }
+    
+    /**
+     * Generates the magic method
+     * 
+     */
+    public function __toString(){
+        return $this->firstname;
+    }
+    
+    /**
+     * @Assert\Callback
+     */
+    public function validate(ExecutionContextInterface $context, $payload)
+    {
+        if (null === $this->firstname && null === $this->lastname && null === $this->companyName) {
+            $context
+                ->buildViolation('At least one of the fields must be filled')
+                ->atPath('firstname')
+                ->addViolation();
+        }
     }
 }

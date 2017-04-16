@@ -37,7 +37,7 @@ class Phonenumber
     
     /**
      * @ORM\ManyToOne(targetEntity="Client", inversedBy="phonenumbers")
-     * @ORM\JoinColumn(name="client_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="client_id", referencedColumnName="id", nullable=false)
      */
     private $client;
 

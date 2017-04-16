@@ -6,6 +6,7 @@ use AppBundle\Entity\Client;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use AppBundle\Entity\Phonenumber;
 
 /**
  * Client controller.
@@ -42,7 +43,7 @@ class ClientController extends Controller
         $client = new Client();
         $form = $this->createForm('AppBundle\Form\ClientType', $client);
         $form->handleRequest($request);
-
+        
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($client);
