@@ -6,10 +6,6 @@
     <table>
         <tbody>
             <tr>
-                <th>Id</th>
-                <td>{{ client.id }}</td>
-            </tr>
-            <tr>
                 <th>Firstname</th>
                 <td>{{ client.firstname }}</td>
             </tr>
@@ -23,6 +19,16 @@
             </tr>
         </tbody>
     </table>
+            
+    <div class="phonenumbersContainer">
+        <h3>Phonenumbers</h3>
+        {% for phonenumber in client.phonenumbers %}
+            <ul>
+                <li class="typeLabel">{{ phonenumber.typeLabel }}</li>
+                <li class="digits">{{ phonenumber.digits }}</li>
+            </ul>
+        {% endfor %}
+    </div>
 
     <ul>
         <li>

@@ -10,4 +10,21 @@ namespace AppBundle\Repository;
  */
 class ClientRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function findOneByIdJoinedToChildren($clientId)
+    {
+        $query = $this->getEntityManager()
+            ->createQueryBuilder()
+            ->select('c', 'p')
+            ->from('AppBundle:Client', 'c')
+            ->leftJoin('c.phonenumbers', 'p', 'WITH', 'p.deleted = 0')
+            ->where('c.id = :id')
+            ->setParameter('id', $clientId)
+            ->getQuery();
+
+        try {
+            return $query->getSingleResult();
+        } catch (\Doctrine\ORM\NoResultException $e) {
+            return null;
+        }
+    }
 }

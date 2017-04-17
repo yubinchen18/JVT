@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Phonenumber
@@ -30,7 +31,7 @@ class Phonenumber
 
     /**
      * @var int
-     *
+     * @Assert\NotBlank()
      * @ORM\Column(name="digits", type="integer")
      */
     private $digits;
@@ -40,6 +41,13 @@ class Phonenumber
      * @ORM\JoinColumn(name="client_id", referencedColumnName="id", nullable=false)
      */
     private $client;
+    
+    /**
+     * @var boolean
+     * 
+     * @ORM\Column(name="deleted", type="boolean", options={"default":0}))
+     */
+    private $deleted = 0;
 
 
     /**
@@ -122,5 +130,29 @@ class Phonenumber
     public function getClient()
     {
         return $this->client;
+    }
+
+    /**
+     * Set deleted
+     *
+     * @param boolean $deleted
+     *
+     * @return Phonenumber
+     */
+    public function setDeleted($deleted)
+    {
+        $this->deleted = $deleted;
+
+        return $this;
+    }
+
+    /**
+     * Get deleted
+     *
+     * @return boolean
+     */
+    public function getDeleted()
+    {
+        return $this->deleted;
     }
 }

@@ -6,7 +6,6 @@
     <table>
         <thead>
             <tr>
-                <th>Id</th>
                 <th>Firstname</th>
                 <th>Lastname</th>
                 <th>Companyname</th>
@@ -16,7 +15,6 @@
         <tbody>
         {% for client in clients %}
             <tr>
-                <td><a href="{{ path('clients_show', { 'id': client.id }) }}">{{ client.id }}</a></td>
                 <td>{{ client.firstname }}</td>
                 <td>{{ client.lastname }}</td>
                 <td>{{ client.companyName }}</td>

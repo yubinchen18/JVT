@@ -10,18 +10,21 @@
         {{ form_row(edit_form.companyName) }}
         
 {#        {{ form_widget(form) }}#}
-            
-        <h3>Phonenumbers</h3>
         
-        <ul class="phonenumbers" data-prototype="{{ form_widget(edit_form.phonenumbers.vars.prototype)|e('html_attr') }}">
-            {# iterate over each existing tag and render its only field: name #}
-            
-            {% for phonenumber in edit_form.phonenumbers %}
-                <li>{{ form_row(phonenumber.typeLabel) }}</li>
-                <li>{{ form_row(phonenumber.digits) }}</li>
-            {% endfor %}
-        </ul>
-        
+        <div class="phonenumbersContainer">
+            <h3>Phonenumbers</h3>
+            <div class="phonenumbers"
+                data-prototype-typeLabel="{{ form_widget(edit_form.phonenumbers.vars.prototype.typeLabel)|e('html_attr') }}"
+                data-prototype-digits="{{ form_widget(edit_form.phonenumbers.vars.prototype.digits)|e('html_attr') }}">
+                {# iterate over each existing tag and render its only field: name #}
+                {% for phonenumber in edit_form.phonenumbers %}
+                    <ul>
+                        <li>{{ form_widget(phonenumber.typeLabel) }}</li>
+                        <li>{{ form_widget(phonenumber.digits) }}</li>
+                    </ul>
+                {% endfor %}
+            </div>
+        </div>
         {{ form_errors(edit_form) }}
 
         <input type="submit" value="Edit" />
@@ -39,7 +42,7 @@
     </ul>
 {% endblock %}
 
-{#{% block javascripts %}
+{% block javascripts %}
     {{ parent() }}
-    <script src="{{ asset('js/Client/newAction.js') }}"></script>
-{% endblock %}#}
+    <script src="{{ asset('js/Client/editAction.js') }}"></script>
+{% endblock %}

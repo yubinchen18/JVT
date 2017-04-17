@@ -10,7 +10,7 @@ jQuery(document).ready(function() {
     $collectionHolder = $('.phonenumbers');
     
     // add a delete link to all of the existing  form li elements
-    $collectionHolder.find('li').each(function() {
+    $collectionHolder.find('ul').each(function() {
         addPhonenumberFormDeleteLink($(this));
     });
 
@@ -44,23 +44,23 @@ jQuery(document).ready(function() {
         $collectionHolder.data('index', index + 1);
 
         // Display the form in the page in an li, before the "Add a phonenumber" link li
-        var $newFormLi = $('<ul></ul>').append(newFormTypeLabel).append(newFormDigits);
-        $newLinkLi.before($newFormLi);
+        var $newFormUl = $('<ul></ul>').append(newFormTypeLabel).append(newFormDigits);
+        $newLinkLi.before($newFormUl);
         
         // add a delete link to the new form
-        addPhonenumberFormDeleteLink($newFormLi);
+        addPhonenumberFormDeleteLink($newFormUl);
     }
     
-    function addPhonenumberFormDeleteLink($newFormLi) {
+    function addPhonenumberFormDeleteLink($newFormUl) {
         var $removeFormA = $('<a href="#">delete this phone</a>');
-        $newFormLi.append($removeFormA);
+        $newFormUl.append($removeFormA);
 
         $removeFormA.on('click', function(e) {
             // prevent the link from creating a "#" on the URL
             e.preventDefault();
 
             // remove the li for the tag form
-            $newFormLi.remove();
+            $newFormUl.remove();
         });
     }
 });

@@ -10,16 +10,14 @@
         {{ form_row(form.companyName) }}
         
 {#        {{ form_widget(form) }}#}
-            
-        <h3>Phonenumbers</h3>
-        
-        <ul class="phonenumbers" data-prototype="{{ form_widget(form.phonenumbers.vars.prototype)|e('html_attr') }}">
-            {# iterate over each existing tag and render its only field: name #}
-            {% for phonenumber in form.phonenumbers %}
-                <li>{{ form_row(phonenumber.typeLabel) }}</li>
-                <li>{{ form_row(phonenumber.digits) }}</li>
-            {% endfor %}
-        </ul>
+        <div class="phonenumbersContainer">
+            <h3>Phonenumbers</h3>
+
+            <div class="phonenumbers"
+                data-prototype-typeLabel="{{ form_widget(form.phonenumbers.vars.prototype.typeLabel)|e('html_attr') }}"
+                data-prototype-digits="{{ form_widget(form.phonenumbers.vars.prototype.digits)|e('html_attr') }}">
+            </div>
+        </div>
         
         {{ form_errors(form) }}
 
