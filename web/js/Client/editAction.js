@@ -21,7 +21,7 @@ jQuery(document).ready(function() {
     // index when inserting a new item (e.g. 2)
     $collectionHolder.data('index', $collectionHolder.find(':input').length);
 
-    $addPhonenumberLink.on('click', function(e) {
+    $addPhonenumberLink.children('a').on('click', function(e) {
         // prevent the link from creating a "#" on the URL
         e.preventDefault();
 

@@ -22,6 +22,13 @@ class ClientType extends AbstractType
             'delete_empty' => true,
             'by_reference' => false,
         ));
+        $builder->add('emails', CollectionType::class, array(
+            'entry_type' => EmailType::class,
+            'allow_add' => true,
+            'allow_delete' => true,
+            'delete_empty' => true,
+            'by_reference' => false,
+        ));
     }
     
     /**

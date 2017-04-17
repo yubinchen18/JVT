@@ -92,8 +92,8 @@ class ClientController extends Controller
             ->getRepository('AppBundle:Client')
             ->findOneByIdJoinedToChildren($client);
         
-        $originalPhones = new ArrayCollection();
         // Create an ArrayCollection of the current Phonenumber objects in the database
+        $originalPhones = new ArrayCollection();
         foreach ($client->getPhonenumbers() as $phonenumber) {
             $originalPhones->add($phonenumber);
         }

@@ -18,6 +18,15 @@
                 data-prototype-digits="{{ form_widget(form.phonenumbers.vars.prototype.digits)|e('html_attr') }}">
             </div>
         </div>
+            
+        <div class="emailsContainer">
+            <h3>Emails</h3>
+
+            <div class="emails"
+                data-prototype-typeLabel="{{ form_widget(form.emails.vars.prototype.typeLabel)|e('html_attr') }}"
+                data-prototype-digits="{{ form_widget(form.emails.vars.prototype.address)|e('html_attr') }}">
+            </div>
+        </div>
         
         {{ form_errors(form) }}
 

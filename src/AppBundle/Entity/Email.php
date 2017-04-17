@@ -6,12 +6,12 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Phonenumber
+ * Email
  *
- * @ORM\Table(name="phonenumber")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\PhonenumberRepository")
+ * @ORM\Table(name="email")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\EmailRepository")
  */
-class Phonenumber
+class Email
 {
     /**
      * @var int
@@ -25,21 +25,21 @@ class Phonenumber
     /**
      * @var string
      *
-     * @ORM\ManyToOne(targetEntity="TypeLabel", inversedBy="phonenumbers")
+     * @ORM\ManyToOne(targetEntity="TypeLabel", inversedBy="emails")
      * @ORM\JoinColumn(name="type_label_id", referencedColumnName="id", nullable=true, onDelete="SET NULL")
      * 
      */
     private $typeLabel;
-
-    /**
-     * @var string
-     * @Assert\NotBlank()
-     * @ORM\Column(name="digits", type="string", length=255, nullable=false)
-     */
-    private $digits;
     
     /**
-     * @ORM\ManyToOne(targetEntity="Client", inversedBy="phonenumbers")
+     * @var string
+     *
+     * @ORM\Column(name="address", type="string", length=255)
+     */
+    private $address;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Client", inversedBy="emails")
      * @ORM\JoinColumn(name="client_id", referencedColumnName="id", nullable=true, onDelete="SET NULL")
      */
     private $client;
@@ -63,51 +63,27 @@ class Phonenumber
     }
 
     /**
-     * Set digits
+     * Set address
      *
-     * @param integer $digits
+     * @param string $address
      *
-     * @return Phonenumber
+     * @return Email
      */
-    public function setDigits($digits)
+    public function setAddress($address)
     {
-        $this->digits = $digits;
+        $this->address = $address;
 
         return $this;
     }
 
     /**
-     * Get digits
+     * Get address
      *
-     * @return int
+     * @return string
      */
-    public function getDigits()
+    public function getAddress()
     {
-        return $this->digits;
-    }
-
-    /**
-     * Set client
-     *
-     * @param \AppBundle\Entity\Client $client
-     *
-     * @return Phonenumber
-     */
-    public function setClient(\AppBundle\Entity\Client $client = null)
-    {
-        $this->client = $client;
-
-        return $this;
-    }
-
-    /**
-     * Get client
-     *
-     * @return \AppBundle\Entity\Client
-     */
-    public function getClient()
-    {
-        return $this->client;
+        return $this->address;
     }
 
     /**
@@ -115,7 +91,7 @@ class Phonenumber
      *
      * @param boolean $deleted
      *
-     * @return Phonenumber
+     * @return Email
      */
     public function setDeleted($deleted)
     {
@@ -139,7 +115,7 @@ class Phonenumber
      *
      * @param \AppBundle\Entity\TypeLabel $typeLabel
      *
-     * @return Phonenumber
+     * @return Email
      */
     public function setTypeLabel(\AppBundle\Entity\TypeLabel $typeLabel = null)
     {
@@ -156,5 +132,29 @@ class Phonenumber
     public function getTypeLabel()
     {
         return $this->typeLabel;
+    }
+
+    /**
+     * Set client
+     *
+     * @param \AppBundle\Entity\Client $client
+     *
+     * @return Email
+     */
+    public function setClient(\AppBundle\Entity\Client $client = null)
+    {
+        $this->client = $client;
+
+        return $this;
+    }
+
+    /**
+     * Get client
+     *
+     * @return \AppBundle\Entity\Client
+     */
+    public function getClient()
+    {
+        return $this->client;
     }
 }

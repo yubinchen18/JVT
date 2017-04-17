@@ -49,6 +49,11 @@ class Client
      * @ORM\OneToMany(targetEntity="Phonenumber", mappedBy="client", cascade={"persist", "remove"})
      */
     private $phonenumbers;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="Email", mappedBy="client", cascade={"persist", "remove"})
+     */
+    private $emails;
 
     public function __construct()
     {
@@ -192,5 +197,39 @@ class Client
                 ->atPath('firstname')
                 ->addViolation();
         }
+    }
+
+    /**
+     * Add email
+     *
+     * @param \AppBundle\Entity\Email $email
+     *
+     * @return Client
+     */
+    public function addEmail(\AppBundle\Entity\Email $email)
+    {
+        $this->emails[] = $email;
+
+        return $this;
+    }
+
+    /**
+     * Remove email
+     *
+     * @param \AppBundle\Entity\Email $email
+     */
+    public function removeEmail(\AppBundle\Entity\Email $email)
+    {
+        $this->emails->removeElement($email);
+    }
+
+    /**
+     * Get emails
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getEmails()
+    {
+        return $this->emails;
     }
 }

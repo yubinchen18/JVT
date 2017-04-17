@@ -25,20 +25,22 @@ class Phonenumber
     /**
      * @var string
      *
-     * @ORM\Column(name="type_label", type="string", length=255)
+     * @ORM\ManyToOne(targetEntity="TypeLabel", inversedBy="phonenumbers")
+     * @ORM\JoinColumn(name="type_label_id", referencedColumnName="id", nullable=true, onDelete="SET NULL")
+     * 
      */
     private $typeLabel;
 
     /**
-     * @var int
+     * @var string
      * @Assert\NotBlank()
-     * @ORM\Column(name="digits", type="integer")
+     * @ORM\Column(name="digits", type="string", length=255, nullable=false)
      */
     private $digits;
     
     /**
      * @ORM\ManyToOne(targetEntity="Client", inversedBy="phonenumbers")
-     * @ORM\JoinColumn(name="client_id", referencedColumnName="id", nullable=false)
+     * @ORM\JoinColumn(name="client_id", referencedColumnName="id", nullable=true, onDelete="SET NULL")
      */
     private $client;
     
@@ -47,7 +49,7 @@ class Phonenumber
      * 
      * @ORM\Column(name="deleted", type="boolean", options={"default":0}))
      */
-    private $deleted;
+    private $deleted = 0;
 
 
     /**
@@ -58,30 +60,6 @@ class Phonenumber
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set typeLabel
-     *
-     * @param string $typeLabel
-     *
-     * @return Phonenumber
-     */
-    public function setTypeLabel($typeLabel)
-    {
-        $this->typeLabel = $typeLabel;
-
-        return $this;
-    }
-
-    /**
-     * Get typeLabel
-     *
-     * @return string
-     */
-    public function getTypeLabel()
-    {
-        return $this->typeLabel;
     }
 
     /**
@@ -130,5 +108,53 @@ class Phonenumber
     public function getClient()
     {
         return $this->client;
+    }
+
+    /**
+     * Set deleted
+     *
+     * @param boolean $deleted
+     *
+     * @return Phonenumber
+     */
+    public function setDeleted($deleted)
+    {
+        $this->deleted = $deleted;
+
+        return $this;
+    }
+
+    /**
+     * Get deleted
+     *
+     * @return boolean
+     */
+    public function getDeleted()
+    {
+        return $this->deleted;
+    }
+
+    /**
+     * Set typeLabel
+     *
+     * @param \AppBundle\Entity\TypeLabel $typeLabel
+     *
+     * @return Phonenumber
+     */
+    public function setTypeLabel(\AppBundle\Entity\TypeLabel $typeLabel = null)
+    {
+        $this->typeLabel = $typeLabel;
+
+        return $this;
+    }
+
+    /**
+     * Get typeLabel
+     *
+     * @return \AppBundle\Entity\TypeLabel
+     */
+    public function getTypeLabel()
+    {
+        return $this->typeLabel;
     }
 }
