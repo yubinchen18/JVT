@@ -21,6 +21,7 @@ class ClientType extends AbstractType
             'allow_delete' => true,
             'delete_empty' => true,
             'by_reference' => false,
+            'label' => false
         ));
         $builder->add('emails', CollectionType::class, array(
             'entry_type' => EmailType::class,
@@ -37,7 +38,7 @@ class ClientType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'AppBundle\Entity\Client'
+            'data_class' => 'AppBundle\Entity\Client',
         ));
     }
 

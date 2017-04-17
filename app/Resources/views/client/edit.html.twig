@@ -18,14 +18,32 @@
                 data-prototype-digits="{{ form_widget(edit_form.phonenumbers.vars.prototype.digits)|e('html_attr') }}">
                 {# iterate over each existing tag and render its only field: name #}
                 {% for phonenumber in edit_form.phonenumbers %}
-                    <ul>
+                    <ul class="phoneUl">
                         <li>{{ form_widget(phonenumber.typeLabel) }}</li>
                         <li>{{ form_widget(phonenumber.digits) }}</li>
                     </ul>
                 {% endfor %}
             </div>
+            {{ form_errors(edit_form.phonenumbers) }}
         </div>
-        {{ form_errors(edit_form) }}
+            
+        <div class="emailsContainer">
+            <h3>Emails</h3>
+
+            <div class="emails"
+                data-prototype-typeLabel="{{ form_widget(edit_form.emails.vars.prototype.typeLabel)|e('html_attr') }}"
+                data-prototype-address="{{ form_widget(edit_form.emails.vars.prototype.address)|e('html_attr') }}">
+                {# iterate over each existing tag and render its only field: name #}
+                {% for email in edit_form.emails %}
+                    <ul class="emailUl">
+                        <li>{{ form_widget(email.typeLabel) }}</li>
+                        <li>{{ form_widget(email.address) }}</li>
+                    </ul>
+                {% endfor %}
+                {{ form_errors(edit_form.emails) }}
+            </div>
+        </div>
+            
 
         <input type="submit" value="Save" />
     {{ form_end(edit_form, {'render_rest': false}) }}

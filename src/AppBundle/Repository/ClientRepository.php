@@ -14,9 +14,10 @@ class ClientRepository extends \Doctrine\ORM\EntityRepository
     {
         $query = $this->getEntityManager()
             ->createQueryBuilder()
-            ->select('c', 'p')
+            ->select('c', 'p', 'e')
             ->from('AppBundle:Client', 'c')
             ->leftJoin('c.phonenumbers', 'p', 'WITH', 'p.deleted = 0')
+            ->leftJoin('c.emails', 'e', 'WITH', 'e.deleted = 0')
             ->where('c.id = :id')
             ->setParameter('id', $clientId)
             ->getQuery();

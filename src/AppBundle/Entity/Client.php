@@ -46,11 +46,13 @@ class Client
     private $companyName;
     
     /**
+     * @Assert\Valid()
      * @ORM\OneToMany(targetEntity="Phonenumber", mappedBy="client", cascade={"persist", "remove"})
      */
     private $phonenumbers;
     
     /**
+     * @Assert\Valid()
      * @ORM\OneToMany(targetEntity="Email", mappedBy="client", cascade={"persist", "remove"})
      */
     private $emails;
@@ -165,6 +167,7 @@ class Client
      */
     public function removePhonenumber(\AppBundle\Entity\Phonenumber $phonenumber)
     {
+        $phonenumber->setDeleted(true);
         $this->phonenumbers->removeElement($phonenumber);
     }
 
@@ -208,6 +211,8 @@ class Client
      */
     public function addEmail(\AppBundle\Entity\Email $email)
     {
+//        die('yoooolooo');
+        $email->setClient($this);
         $this->emails[] = $email;
 
         return $this;
@@ -220,6 +225,7 @@ class Client
      */
     public function removeEmail(\AppBundle\Entity\Email $email)
     {
+        $email->setDeleted(true);
         $this->emails->removeElement($email);
     }
 

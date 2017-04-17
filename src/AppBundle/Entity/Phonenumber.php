@@ -33,7 +33,7 @@ class Phonenumber
 
     /**
      * @var string
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(message = "Enter phone")
      * @ORM\Column(name="digits", type="string", length=255, nullable=false)
      */
     private $digits;

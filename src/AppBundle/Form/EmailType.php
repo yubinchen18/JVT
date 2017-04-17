@@ -5,6 +5,7 @@ namespace AppBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 class EmailType extends AbstractType
 {
@@ -13,7 +14,11 @@ class EmailType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('address')->add('deleted')->add('typeLabel')->add('client');
+        $builder
+            ->add('typeLabel', EntityType::class, array(
+                'class' => 'AppBundle:TypeLabel',
+            ))
+            ->add('address');
     }
     
     /**

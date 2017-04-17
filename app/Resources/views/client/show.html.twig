@@ -29,6 +29,16 @@
             </ul>
         {% endfor %}
     </div>
+    
+    <div class="emailsContainer">
+        <h3>Emails</h3>
+        {% for email in client.emails %}
+            <ul>
+                <li class="typeLabel">{{ email.typeLabel }}</li>
+                <li class="address">{{ email.address }}</li>
+            </ul>
+        {% endfor %}
+    </div>
 
     <ul>
         <li>

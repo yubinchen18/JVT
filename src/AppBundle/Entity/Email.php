@@ -33,7 +33,7 @@ class Email
     
     /**
      * @var string
-     *
+     * @Assert\NotBlank(message= "Enter email")
      * @ORM\Column(name="address", type="string", length=255)
      */
     private $address;

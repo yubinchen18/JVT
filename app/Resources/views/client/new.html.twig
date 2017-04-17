@@ -12,10 +12,16 @@
 {#        {{ form_widget(form) }}#}
         <div class="phonenumbersContainer">
             <h3>Phonenumbers</h3>
-
             <div class="phonenumbers"
                 data-prototype-typeLabel="{{ form_widget(form.phonenumbers.vars.prototype.typeLabel)|e('html_attr') }}"
                 data-prototype-digits="{{ form_widget(form.phonenumbers.vars.prototype.digits)|e('html_attr') }}">
+                {% for phonenumber in form.phonenumbers %}
+                    <ul class="phoneUl">
+                        <li>{{ form_widget(phonenumber.typeLabel) }}</li>
+                        <li>{{ form_widget(phonenumber.digits) }}</li>
+                    </ul>
+                {% endfor %}
+                {{ form_errors(form.phonenumbers) }}
             </div>
         </div>
             
@@ -24,7 +30,14 @@
 
             <div class="emails"
                 data-prototype-typeLabel="{{ form_widget(form.emails.vars.prototype.typeLabel)|e('html_attr') }}"
-                data-prototype-digits="{{ form_widget(form.emails.vars.prototype.address)|e('html_attr') }}">
+                data-prototype-address="{{ form_widget(form.emails.vars.prototype.address)|e('html_attr') }}">
+                {% for email in form.emails %}
+                    <ul class="emailUl">
+                        <li>{{ form_widget(email.typeLabel) }}</li>
+                        <li>{{ form_widget(email.address) }}</li>
+                    </ul>
+                {% endfor %}
+                {{ form_errors(form.emails) }}
             </div>
         </div>
         

@@ -6,8 +6,6 @@ use AppBundle\Entity\Client;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
-use AppBundle\Entity\Phonenumber;
-use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Client controller.
@@ -44,7 +42,9 @@ class ClientController extends Controller
         $client = new Client();
         $form = $this->createForm('AppBundle\Form\ClientType', $client);
         $form->handleRequest($request);
-        
+//        dump($form->getData());die();
+//        dump($request->request);die();
+        dump($form->isValid());
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($client);
@@ -56,6 +56,7 @@ class ClientController extends Controller
         return $this->render('client/new.html.twig', array(
             'client' => $client,
             'form' => $form->createView(),
+            'postData' => $request->request
         ));
     }
 
@@ -92,31 +93,15 @@ class ClientController extends Controller
             ->getRepository('AppBundle:Client')
             ->findOneByIdJoinedToChildren($client);
         
-        // Create an ArrayCollection of the current Phonenumber objects in the database
-        $originalPhones = new ArrayCollection();
-        foreach ($client->getPhonenumbers() as $phonenumber) {
-            $originalPhones->add($phonenumber);
-        }
-        
         $deleteForm = $this->createDeleteForm($client);
         $editForm = $this->createForm('AppBundle\Form\ClientType', $clientObj);
         $editForm->handleRequest($request);
         
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            // remove the relationship between the tag and the Task
-            foreach ($originalPhones as $phonenumber) {
-                if ($client->getPhonenumbers()->contains($phonenumber) === false) {
-                    // set phonenumber to deleted
-                    $phonenumber->setDeleted(true);
-                    $em->persist($client);
-                    // if you wanted to delete the Tag entirely, you can also do that
-                    // $em->remove($tag);
-                }
-            }
             $em->flush();
 
-            return $this->redirectToRoute('clients_edit', array('id' => $client->getId()));
+            return $this->redirectToRoute('clients_show', array('id' => $client->getId()));
         }
 
         return $this->render('client/edit.html.twig', array(
