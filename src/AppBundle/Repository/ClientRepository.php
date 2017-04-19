@@ -16,8 +16,8 @@ class ClientRepository extends \Doctrine\ORM\EntityRepository
             ->createQueryBuilder()
             ->select('c', 'p', 'e')
             ->from('AppBundle:Client', 'c')
-            ->leftJoin('c.phonenumbers', 'p', 'WITH', 'p.deleted = 0')
-            ->leftJoin('c.emails', 'e', 'WITH', 'e.deleted = 0')
+            ->leftJoin('c.phonenumbers', 'p')
+            ->leftJoin('c.emails', 'e')
             ->where('c.id = :id')
             ->setParameter('id', $clientId)
             ->getQuery();
@@ -27,5 +27,68 @@ class ClientRepository extends \Doctrine\ORM\EntityRepository
         } catch (\Doctrine\ORM\NoResultException $e) {
             return null;
         }
+    }
+    
+    public function findAllDeleted()
+    {
+        $query = $this->getEntityManager()
+            ->createQueryBuilder()
+            ->select('c')
+            ->from('AppBundle:Client', 'c')
+            ->where('c.deletedAt IS NOT NULL')
+            ->getQuery();
+
+        try {
+            return $query->getResult();
+        } catch (\Doctrine\ORM\NoResultException $e) {
+            return null;
+        }
+    }
+    
+    public function findDeletedJoinedToChildren($ClientId)
+    {
+        $query = $this->getEntityManager()
+            ->createQueryBuilder()
+            ->select('c', 'p', 'e')
+            ->from('AppBundle:Client', 'c')
+            ->leftJoin('c.phonenumbers', 'p', 'WITH', 'p.deletedAt IS NOT NULL')
+            ->leftJoin('c.emails', 'e', 'WITH', 'e.deletedAt IS NOT NULL')
+            ->where('c.deletedAt IS NOT NULL')
+            ->andWhere('c.id = :id')
+            ->setParameter('id', $ClientId)
+            ->getQuery();
+
+        try {
+            return $query->getSingleResult();
+        } catch (\Doctrine\ORM\NoResultException $e) {
+            return null;
+        }
+    }
+    
+    public function findOneJoinedToDeletedChildren($ClientId)
+    {
+        $query = $this->getEntityManager()
+            ->createQueryBuilder()
+            ->select('c', 'p', 'e')
+            ->from('AppBundle:Client', 'c')
+            ->leftJoin('c.phonenumbers', 'p', 'WITH', 'p.deletedAt IS NOT NULL')
+            ->leftJoin('c.emails', 'e', 'WITH', 'e.deletedAt IS NOT NULL')
+            ->where('c.id = :id')
+            ->setParameter('id', $ClientId)
+            ->getQuery();
+
+        try {
+            return $query->getSingleResult();
+        } catch (\Doctrine\ORM\NoResultException $e) {
+            return null;
+        }
+    }
+    
+    public function findAllOrderByLastname()
+    {
+        return $this->findBy(
+            [],
+            ['lastname' => 'ASC']
+        );
     }
 }

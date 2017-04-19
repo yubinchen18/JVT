@@ -23,8 +23,8 @@ class ClientController extends Controller
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
-
-        $clients = $em->getRepository('AppBundle:Client')->findAll();
+//        $em->getFilters()->disable('softdeleteable');
+        $clients = $em->getRepository('AppBundle:Client')->findAllOrderByLastname();
 
         return $this->render('client/index.html.twig', array(
             'clients' => $clients,
@@ -42,9 +42,6 @@ class ClientController extends Controller
         $client = new Client();
         $form = $this->createForm('AppBundle\Form\ClientType', $client);
         $form->handleRequest($request);
-//        dump($form->getData());die();
-//        dump($request->request);die();
-        dump($form->isValid());
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($client);
@@ -56,14 +53,13 @@ class ClientController extends Controller
         return $this->render('client/new.html.twig', array(
             'client' => $client,
             'form' => $form->createView(),
-            'postData' => $request->request
         ));
     }
 
     /**
      * Finds and displays a client entity.
      *
-     * @Route("/{id}", name="clients_show")
+     * @Route("/{id}", name="clients_show", requirements={"id": "\d+"})
      * @Method("GET")
      */
     public function showAction(Client $client)
@@ -114,16 +110,19 @@ class ClientController extends Controller
     /**
      * Deletes a client entity.
      *
-     * @Route("/{id}", name="clients_delete")
+     * @Route("/{id}", name="clients_delete", requirements={"id": "\d+"})
      * @Method("DELETE")
      */
-    public function deleteAction(Request $request, Client $client)
+    public function deleteAction(Request $request, Client $client, $hard = false)
     {
         $form = $this->createDeleteForm($client);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+            if ($hard) {
+                $em->getFilters()->disable('softdeleteable');
+            }
             $em->remove($client);
             $em->flush();
         }
@@ -145,5 +144,111 @@ class ClientController extends Controller
             ->setMethod('DELETE')
             ->getForm()
         ;
+    }
+    
+    /**
+     * Finds and displays deleted clients.
+     *
+     * @Route("/restore", name="clients_restore_index")
+     * @Method("GET")
+     */
+    public function indexRestoreAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $em->getFilters()->disable('softdeleteable');
+        $clients = $em->getRepository('AppBundle:Client')->findAllDeleted();
+        return $this->render('client/restore/index.html.twig', array(
+            'clients' => $clients,
+        ));
+    }
+    
+    /**
+     * Finds and displays deleted contacts of a client.
+     *
+     * @Route("/restore/{id}", name="clients_restore_show", requirements={"id": "\d+"})
+     * @Method("GET")
+     */
+    public function showRestoreAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $em->getFilters()->disable('softdeleteable');
+        $client = $em->getRepository('AppBundle:Client')->findOneJoinedToDeletedChildren($id);
+        
+        return $this->render('client/restore/show.html.twig', array(
+            'client' => $client,
+        ));
+    }
+    
+    
+    /**
+     * Restores a deleted client.
+     *
+     * @Route("/{id}/restore", name="clients_restore", requirements={"id": "\d+"})
+     * @Method("GET")
+     */
+    public function restoreAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $em->getFilters()->disable('softdeleteable');
+        $client = $em->getRepository('AppBundle:Client')->findDeletedJoinedToChildren($id);
+        $phones = $client->getPhonenumbers();
+        $emails = $client->getEmails();
+        
+        // restore all phones
+        if (!empty($phones)) {
+            foreach ($phones as $phone) {
+                $phone->setDeletedAt(NULL);
+                $em->persist($phone);
+            }
+        }
+        
+        // restore all emails
+        if (!empty($emails)) {
+            foreach ($emails as $email) {
+                $email->setDeletedAt(NULL);
+                $em->persist($email);
+            }
+        }
+        $client->setDeletedAt(NULL);
+        $em->persist($client);
+        $em->flush();
+        
+        return $this->redirectToRoute('clients_restore_index');
+    }
+    
+    /**
+     * Restores a deleted email of a client.
+     *
+     * @Route("/restore/email/{id}", name="clients_restore_email", requirements={"id": "\d+"})
+     * @Method("GET")
+     */
+    public function restoreEmailAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $em->getFilters()->disable('softdeleteable');
+        $email = $em->getRepository('AppBundle:Email')->find($id);
+        $email->setDeletedAt(NULL);
+        $em->persist($email);
+        $em->flush();
+        
+        return $this->redirectToRoute('clients_restore_show', array('id' => $email->getClient()->getId()));
+    }
+    
+    /**
+     * Restores a deleted email of a client.
+     *
+     * @Route("/restore/phonenumber/{id}", name="clients_restore_phonenumber", requirements={"id": "\d+"})
+     * @Method("GET")
+     */
+    public function restorePhonenumberAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $em->getFilters()->disable('softdeleteable');
+        $phone = $em->getRepository('AppBundle:Phonenumber')->find($id);
+        $phone->setDeletedAt(NULL);
+        $em->persist($phone);
+        $em->flush();
+        
+        return $this->redirectToRoute('clients_restore_show', array('id' => $phone->getClient()->getId()));
     }
 }

@@ -44,20 +44,25 @@
             </div>
         </div>
             
-
-        <input type="submit" value="Save" />
-    {{ form_end(edit_form, {'render_rest': false}) }}
-
-    <ul>
-        <li>
-            <a href="{{ path('clients_index') }}">Back to the list</a>
-        </li>
-        <li>
+    <div>
+        <div>
+            <a href="{{ path('clients_index') }}"><button type="button">Back to the list</button></a>
+        </div>
+        <div>
+            <input type="submit" value="Save" />
+        </div>
+        {{ form_end(edit_form, {'render_rest': false}) }}
+        
+        <div>
             {{ form_start(delete_form) }}
                 <input type="submit" value="Delete">
             {{ form_end(delete_form) }}
-        </li>
-    </ul>
+        </div>
+        
+        <div>
+            <a href="{{ path('clients_restore_show', { 'id': client.id }) }}"><button type="button">Restore deleted contacts</button></a>
+        </div>
+    </div>
 {% endblock %}
 
 {% block javascripts %}

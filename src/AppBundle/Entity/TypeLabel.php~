@@ -3,10 +3,12 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * TypeLabel
  *
+ * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  * @ORM\Table(name="type_label")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\TypeLabelRepository")
  */
@@ -37,6 +39,23 @@ class TypeLabel
      * @ORM\OneToMany(targetEntity="Email", mappedBy="typeLabel")
      */
     private $emails;
+    
+    /**
+     * @Gedmo\Timestampable(on="create")
+     * @ORM\Column(type="datetime")
+     */
+    private $createdAt;
+
+    /**
+     * @Gedmo\Timestampable(on="update")
+     * @ORM\Column(type="datetime")
+     */
+    private $updatedAt;
+    
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $deletedAt;
 
     /**
      * Get id
@@ -119,5 +138,39 @@ class TypeLabel
      */
     public function __toString(){
         return $this->name;
+    }
+
+    /**
+     * Add email
+     *
+     * @param \AppBundle\Entity\Email $email
+     *
+     * @return TypeLabel
+     */
+    public function addEmail(\AppBundle\Entity\Email $email)
+    {
+        $this->emails[] = $email;
+
+        return $this;
+    }
+
+    /**
+     * Remove email
+     *
+     * @param \AppBundle\Entity\Email $email
+     */
+    public function removeEmail(\AppBundle\Entity\Email $email)
+    {
+        $this->emails->removeElement($email);
+    }
+
+    /**
+     * Get emails
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getEmails()
+    {
+        return $this->emails;
     }
 }

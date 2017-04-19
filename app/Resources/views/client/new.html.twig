@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Client creation</h1>
+    <h1>New Client</h1>
 
     {{ form_start(form) }}
         {{ form_row(form._token) }}
@@ -43,14 +43,18 @@
         
         {{ form_errors(form) }}
 
-        <input type="submit" value="Create" />
+        
+        <div>
+            <div>
+                <a href="{{ path('clients_index') }}"><button>Back to the list</button></a>
+            </div>
+            <div>
+                <input type="submit" value="Create" />
+            </div>
+        </div>
     {{ form_end(form, {'render_rest': false}) }}
 
-    <ul>
-        <li>
-            <a href="{{ path('clients_index') }}">Back to the list</a>
-        </li>
-    </ul>
+    
 {% endblock %}
 
 {% block javascripts %}

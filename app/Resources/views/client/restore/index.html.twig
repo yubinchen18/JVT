@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Clients list</h1>
+    <h1>Deleted Clients</h1>
 
     <table>
         <thead>
@@ -21,10 +21,7 @@
                 <td>
                     <ul>
                         <li>
-                            <a href="{{ path('clients_show', { 'id': client.id }) }}">show</a>
-                        </li>
-                        <li>
-                            <a href="{{ path('clients_edit', { 'id': client.id }) }}">edit</a>
+                            <a href="{{ path('clients_restore', { 'id': client.id }) }}">restore</a>
                         </li>
                     </ul>
                 </td>
@@ -35,10 +32,7 @@
 
     <div>
         <div>
-            <a href="{{ path('clients_new') }}"><button>Create a new client</button></a>
-        </div>
-        <div>
-            <a href="{{ path('clients_restore_index') }}"><button>Restore deleted clients</button></a>
+            <a href="{{ path('clients_index') }}"><button>Back to the list</button></a>
         </div>
     </div>
 {% endblock %}

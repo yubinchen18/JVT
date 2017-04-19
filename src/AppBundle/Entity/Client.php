@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
@@ -10,6 +11,7 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
 /**
  * Client
  *
+ * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  * @ORM\Table(name="client")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\ClientRepository")
  */
@@ -56,6 +58,24 @@ class Client
      * @ORM\OneToMany(targetEntity="Email", mappedBy="client", cascade={"persist", "remove"})
      */
     private $emails;
+    
+    /**
+     * @Gedmo\Timestampable(on="create")
+     * @ORM\Column(type="datetime")
+     */
+    private $createdAt;
+
+    /**
+     * @Gedmo\Timestampable(on="update")
+     * @ORM\Column(type="datetime")
+     */
+    private $updatedAt;
+    
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $deletedAt;
+    
 
     public function __construct()
     {
@@ -167,7 +187,7 @@ class Client
      */
     public function removePhonenumber(\AppBundle\Entity\Phonenumber $phonenumber)
     {
-        $phonenumber->setDeleted(true);
+        $phonenumber->setDeletedAt(new \DateTime("now"));
         $this->phonenumbers->removeElement($phonenumber);
     }
 
@@ -225,7 +245,7 @@ class Client
      */
     public function removeEmail(\AppBundle\Entity\Email $email)
     {
-        $email->setDeleted(true);
+        $email->setDeletedAt(new \DateTime("now"));
         $this->emails->removeElement($email);
     }
 
@@ -237,5 +257,77 @@ class Client
     public function getEmails()
     {
         return $this->emails;
+    }
+
+    /**
+     * Set createdAt
+     *
+     * @param \DateTime $createdAt
+     *
+     * @return Client
+     */
+    public function setCreatedAt($createdAt)
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * Get createdAt
+     *
+     * @return \DateTime
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * Set updatedAt
+     *
+     * @param \DateTime $updatedAt
+     *
+     * @return Client
+     */
+    public function setUpdatedAt($updatedAt)
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * Get updatedAt
+     *
+     * @return \DateTime
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
+
+    /**
+     * Set deletedAt
+     *
+     * @param \DateTime $deletedAt
+     *
+     * @return Client
+     */
+    public function setDeletedAt($deletedAt)
+    {
+        $this->deletedAt = $deletedAt;
+
+        return $this;
+    }
+
+    /**
+     * Get deletedAt
+     *
+     * @return \DateTime
+     */
+    public function getDeletedAt()
+    {
+        return $this->deletedAt;
     }
 }

@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Deleted Contacts</h1>
+
+    <div class="phonenumbersContainer">
+        <h3>Phonenumbers</h3>
+        {% for phonenumber in client.phonenumbers %}
+            <ul>
+                <li class="typeLabel">{{ phonenumber.typeLabel }}</li>
+                <li class="digits">{{ phonenumber.digits }}</li>
+                <li>
+                    <a href="{{ path('clients_restore_phonenumber', { 'id': phonenumber.id }) }}"><button>restore</button></a>
+                </li>
+            </ul>
+        {% endfor %}
+    </div>
+
+    <div class="emailsContainer">
+        <h3>Emails</h3>
+        {% for email in client.emails %}
+            <ul>
+                <li class="typeLabel">{{ email.typeLabel }}</li>
+                <li class="address">{{ email.address }}</li>
+                <li>
+                    <a href="{{ path('clients_restore_email', { 'id': email.id }) }}"><button>restore</button></a>
+                </li>
+            </ul>
+        {% endfor %}
+    </div>
+            
+        
+    <div>
+        <div>
+            <a href="{{ path('clients_edit', { 'id': client.id }) }}"><button>Back to edit</button></a>
+        </div>
+    </div>
+{% endblock %}
